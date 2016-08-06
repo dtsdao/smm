@@ -8,7 +8,9 @@
 
 if (!file_exists("file/config.php")){
 	if (!file_exists("install.php")){
-		echo "<div align='center'>缺少配置文件！</div>";
+		echo "<title>CONFIG_ERROR</title>\n";
+		echo "<div align=center>缺少配置文件！</div>";
+		exit;
 	}
 	header("Location: install.php");
 }

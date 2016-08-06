@@ -12,6 +12,9 @@ h1,h2,h3,h4,h5,h6 {
 	font-size:250%;
 	font-family:Times New Roman;
 }
+table {
+	text-align: center;
+}
 #footer {
 	padding:3em 0;
 	line-height:1.5;

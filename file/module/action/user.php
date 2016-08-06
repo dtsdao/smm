@@ -13,6 +13,39 @@ $new_pwd = $_POST['new_password'];
 
 switch($_POST['action']){
 	case '登录':
+		if ($_SESSION[$func->getPre('times')] == 4){
+			$theme->divAgc("机会用尽！");
+			break;
+		}
+		
+		if ($db->checkPwd($username,$password)){
+			$_SESSION[$func->getPre('username')] = $username;
+			$_SESSION[$func->getPre('times')] = 0;
+			
+			$func->turn('manage.php');
+			break;
+		} else {
+			if (!$_SESSION[$func->getPre('times')]){
+				$_SESSION[$func->getPre('times')] = 0;
+			}
+			
+			$_SESSION[$func->getPre('times')]++;
+			$times = 5-$_SESSION[$func->getPre('times')];
+			
+			$theme->divAgc("密码错误！你还剩 " . $times . " 次机会!");
+		}
+		break;
+	case '退出':
+		if ($_SESSION[$func->getPre('username')] != 'visitor' &&　$_SESSION[$func->getPre('username')] !== null){
+			unset($_SESSION[$func->getPre('username')]);
+			unset($_SESSION[$func->getPre('times')]);
+			session_destroy;
+			
+			$func->turn('index.php');
+		} else {
+			$theme->divAgc("未登录！");
+		}
+		break;
 	case '注册':
 	case '修改密码':
 	case '添加用户':

@@ -9,29 +9,34 @@
 class DB{
 	public $conn;
 	private $dbConf;
-	private $func;
+	public $func;
 	
 	public function __construct($dbConf,$func){
 		//new一个对象时打开数据库连接
-		$this->conn = new mysqli($dbConf['host'],$dbConf['user'],$dbConf['pwd'],$dbConf['db'],$dbConf['port']);
-		$this->checkError();
+		@$this->conn = new mysqli($dbConf['host'],$dbConf['user'],$dbConf['pwd'],$dbConf['db'],$dbConf['port']);
 		
+		//检查错误
+		if (mysqli_connect_errno()){
+			echo "<title>CONNECT_ERROR</title>\n";
+			echo "<div align=center>" . mysqli_connect_errno($this->conn) . mysqli_connect_error($this->conn) . "</div>";
+			exit;
+		} 
+		
+		//更新类属性
 		$this->dbConf = $dbConf;
 		$this->func = $func;
 	}
 	
 	public function close(){
+		//关闭数据库
 		$this->conn->close();
 	}
 	
 	public function checkError(){
-		//查看是否有错误
-		if (mysqli_connect_errno($this->conn)){
-			echo mysqli_connect_errno($this->conn) . mysqli_connect_error($this->conn);
-			exit;
-		} 
+		//检查错误
 		if (mysqli_errno($this->conn)){
-			echo mysqli_errno($this->conn) . mysqli_error($this->conn);
+			echo "<title>DATABASE_ERROR</title>\n";
+			echo "<div align=center>" . mysqli_errno($this->conn) . mysqli_error($this->conn) . "</div>";
 			exit;
 		} 
 	}

@@ -12,6 +12,7 @@ class THEME{
 	private $db;
 	private $themeUrl;
 	private $title;
+	private $func;
 	
 	public function __construct($pagename,$db,$title = false){
 		//获取设置
@@ -21,6 +22,7 @@ class THEME{
 		$this->objectName = $db->getConfig("object_name");
 		$this->db = $db;
 		$this->themeUrl = 'file/theme/' . $theme . '/';
+		$this->func = $db->func;
 		if (!$title) $this->title = strtoupper($pagename);
 			else $this->title = strtoupper($title);
 		
@@ -48,7 +50,8 @@ class THEME{
 	}
 	
 	public function divAgc($inner){
-		echo "\n<div align='center'>\n" . $inner . "\n</div>";
+		//较为美观（？）的错误信息提示
+		echo "\n<div align=center>\n" . $inner . "\n</div>";
 	}
 }
 ?>
