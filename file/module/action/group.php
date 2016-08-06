@@ -11,7 +11,7 @@ $user = $_POST['username'];
 $perm = $_POST['permission'];
 $group = $_POST['group'];
 
-switch($_POST['action']){
+switch($_REQUEST['action']){
 	case '增加分组':
 	case '增加组中用户':
 	case '修改用户分组':

@@ -12,10 +12,10 @@ include "file/essentials.php";
 $theme = new THEME('header',$db,'MSG');
 
 //接收传入数据
-$kind = $_POST['kind'];
+$kind = $_REQUEST['kind'];
 $fileAddress = 'file/module/action/' . $kind . '.php';
 
-switch($_POST['kind']){
+switch($kind){
 	case 'user':
 	case 'group':
 	case 'msg':

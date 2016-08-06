@@ -15,7 +15,7 @@ switch($_GET['area']){
 	case "群组":
 		$page = new THEME("manage_group",$db);
 		break;
-	case "系统设置":
+	case "设置":
 		$page = new THEME("manage_config",$db);
 		break;
 	case "信息":

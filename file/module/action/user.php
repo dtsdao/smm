@@ -11,7 +11,7 @@ $username = $_POST['username'];
 $password = $_POST['password'];
 $new_pwd = $_POST['new_password'];
 
-switch($_POST['action']){
+switch($_REQUEST['action']){
 	case '登录':
 		if ($_SESSION[$func->getPre('times')] == 4){
 			$theme->divAgc("机会用尽！");
@@ -36,14 +36,14 @@ switch($_POST['action']){
 		}
 		break;
 	case '退出':
-		if ($_SESSION[$func->getPre('username')] != 'visitor' &&　$_SESSION[$func->getPre('username')] !== null){
+		if ($_SESSION[$func->getPre('username')] != 'visitor'){
 			unset($_SESSION[$func->getPre('username')]);
 			unset($_SESSION[$func->getPre('times')]);
 			session_destroy;
 			
 			$func->turn('index.php');
 		} else {
-			$theme->divAgc("未登录！");
+			$func->turn('index.php');
 		}
 		break;
 	case '注册':

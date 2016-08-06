@@ -13,23 +13,33 @@
 
 			<h1 align=center><?php echo $this->objectName; ?></h1>
 			<div align=center>
-				<a href="login.php"><input type="submit" value="登录"></a>
-				
+
 				<?php 
-					if ($db->getConfig("allow_reg") == "on") {
+					if ($_SESSION[$this->func->getPre('username')] != "visitor") {
 						?>
-				<br />
-				<a href="register.php"><input type="submit" value="注册"></a>
+						<br />
+						<a href="manage.php"><input type="submit" value="管理页面"></a>
 						<?php
+					} else {
+						//登录
+						?>
+						<a href="login.php"><input type="submit" value="登录"></a>
+						<?php
+						if ($db->getConfig("allow_reg") == "on") {
+							?>
+							<br />
+							<a href="register.php"><input type="submit" value="注册"></a>
+							<?php
+						}
 					}
 				?>
-
+				
 				<?php
 					if ($db->getConfig("showpage") == "on") {
 						?>
-				<br />
-				<br />
-				<a href="show.php"><input type="submit" value="展示页"></a>
+						<br />
+						<br />
+						<a href="show.php"><input type="submit" value="展示页"></a>
 						<?php
 					}
 				?>

@@ -10,22 +10,72 @@
 
 ?>
 <?php include "header.php"; ?>
+<?php 
+	if ($_SESSION[$this->func->getPre('username')] == "visitor"){
+		$this->divAgc("未登录！");
+		include "footer.php";
+		exit;
+	}
+?>
+<?php include "manage_header.php"; ?>
 
-			<!-- HEAD -->
-			<table width="80%" border="1" align="center">
-			  <tr>
-				<td colspan="4"><h1 align=center><?php echo $this->objectName; ?></h1></td>
-				<td width="20%" rowspan="2">
-				Welcome <?php echo $_SESSION[$this->func->getPre('username')]; ?>,<br />
-				Logout Showpage
-				</td>
-			  </tr>
-			  <tr>
-				<td width="20%">信息</td>
-				<td width="20%">用户</td>
-				<td width="20%">分组</td>
-				<td width="20%">系统设置</td>
-			  </tr>
-			</table>
+<?php 
+$result = $this->db->getMsg();
+$id = 0;
+
+if ($result->num_rows > 0) $maxline = $result->num_rows + 1; else $maxline = 1;
+//格式化信息
+for ($i=1;$i<$maxline;$i++){
+	$row = $result->fetch_assoc();
+	$rows[$i] = $row;
+}
+?>
+
+<table border=1 align="center" width="80%">
+	<!-- 表头 -->
+	<tr>
+		<th>序号</th>
+		<?php foreach ($this->db->getFormat() as $top){ ?>
+		<th><?php echo $top; ?></th>
+		<?php } ?>
+		<th>作者</th>
+		<th>时间</th>
+		<th>操作</th>
+	</tr>
+	
+	<br />
+	
+	<!-- 数据库中信息 -->
+	<?php for ($i=1;$i<$maxline;$i++){ ?>
+		<tr><form method="POST" action="action.php">
+			<input type="hidden" name="kind" value="msg">
+			<input type="hidden" name="id" value="<?php $id = $rows[$i]['id']; echo $id; ?>">
+			<td><?php echo $id; ?></td>
+		<?php foreach ($this->db->getFormat() as $sign){ ?>
+				<td><input name="<?php echo $sign; ?>" value="<?php echo $rows[$i][$sign]; ?>"></td>
+		<?php } ?>
+			<td><?php echo $rows[$i]['author']; ?></td>
+			<td><?php echo $rows[$i]['time']; ?></td>
+			<td>
+				<input name="action"   type="submit" value="修改">
+				<input name="action"   type="submit" value="删除">
+			</td>
+		</form></tr>
+	<?php } ?>
+	
+	<!-- 新建条目 -->
+	<tr>
+		<form method="POST" action="action.php">
+			<input type="hidden" name="kind" value="msg">
+			<td><?php echo $id + 1; ?></td>
+			<?php foreach ($this->db->getFormat() as $sign){ ?>
+				<td><input name="<?php echo $sign; ?>"></td>
+			<?php } ?>
+			<td><?php echo $_SESSION[$this->func->getPre('username')]; ?></td>
+			<td><?php echo date("Y-m-d"); ?></td>
+			<td><input name="action"   type="submit" value="新建"></a></td>
+		</form>
+	</tr>
+</table>
 
 <?php include "footer.php" ?>

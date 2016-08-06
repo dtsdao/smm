@@ -8,7 +8,6 @@
 
 class THEME{
 	private $objectName;
-	private $format;
 	private $db;
 	private $themeUrl;
 	private $title;
@@ -36,21 +35,12 @@ class THEME{
 			$this->divAgc("缺少" . $pagename . "页面！");
 			exit;
 		}
-
-		//表格各列获取
-		$i = 0;
-		$token = strtok($db->getConfig("format"),",");
-		while ($token !== false){
-			$this->format[$i] = $token;
-			$token = strtok(",");
-			$i++;
-		}
 		
 		include $this->themeUrl . $pagename . '.php';
 	}
 	
 	public function divAgc($inner){
-		//较为美观（？）的错误信息提示
+		//较为美观（？）的信息提示
 		echo "\n<div align=center>\n" . $inner . "\n</div>";
 	}
 }
