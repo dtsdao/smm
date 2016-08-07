@@ -26,3 +26,4 @@
 				<td width="20%"><a href="manage.php?area=设置">设置</a></td>
 			  </tr>
 			</table>
+		<br />

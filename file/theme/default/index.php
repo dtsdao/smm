@@ -35,7 +35,7 @@
 				?>
 				
 				<?php
-					if ($db->getConfig("showpage") == "on") {
+					if (($db->getConfig("showpage") == "on") || (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"msg") !== false)) {
 						?>
 						<br />
 						<br />

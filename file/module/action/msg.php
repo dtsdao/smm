@@ -6,6 +6,13 @@
 //By DTSDAO
 //Action - Msg
 
+//判断权限
+if (strpos($db->getUserPerm($_SESSION[$func->getPre('username')]),"msg") === false){
+	$theme->divAgc("权限不足！");
+	$theme = new THEME("footer",$db);
+	exit;
+}
+
 //接收传入数据
 $id = $_POST['id'];
 $msg = array();
@@ -15,12 +22,6 @@ foreach ($db->getFormat() as $sign){
 
 switch($_REQUEST['action']){
 		case "修改":
-		if ($_SESSION[$func->getPre('username')] == "visitor"){
-			$theme->divAgc("未登录！");
-			$theme = new THEME('footer',$db);
-			exit;
-		}
-		
 		foreach ($db->getFormat() as $sign){
 			$db->updateMsg($sign,$msg[$sign],$id,$theme);
 		}
@@ -30,12 +31,6 @@ switch($_REQUEST['action']){
 		$theme->divAgc("修改成功！");
 		break;
 	case "新建":
-		if ($_SESSION[$func->getPre('username')] == "visitor"){
-			$theme->divAgc("未登录！");
-			$theme = new THEME('footer',$db);
-			exit;
-		}
-		
 		$list = "null";
 		
 		foreach ($db->getFormat() as $sign){
@@ -49,12 +44,6 @@ switch($_REQUEST['action']){
 		$theme->divAgc("添加成功！");
 		break;
 	case "删除":
-		if ($_SESSION[$func->getPre('username')] == "visitor"){
-			$theme->divAgc("未登录！");
-			$theme = new THEME('footer',$db);
-			exit;
-		}
-		
 		$db->deleteMsg($id,$theme);
 		
 		$theme->divAgc("删除成功！");
@@ -62,6 +51,5 @@ switch($_REQUEST['action']){
 	default:
 		$theme->divAgc("没有传入操作！请检查主题文件！");
 		break;
-		exit;
 }
 ?>

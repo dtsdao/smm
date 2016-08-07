@@ -22,5 +22,27 @@ class functions{
 	public function getPre($name){
 		return $this->dbConf['prefix'] . $name;
 	}
+	
+	//修改数据库设置
+	public function updateDbConf($newConf){
+		$file = fopen("file/config.php",'w');
+		fwrite($file,
+"<?php
+//Simple Message Manage
+//简单信息管理
+
+//Config
+
+\$dbConf = array(
+	'host' => '" . $newConf['host'] . "',
+	'user' => '" . $newConf['user'] . "',
+	'pwd' => '" . $newConf['pwd'] . "',
+	'db' => '" . $newConf['db'] . "',
+	'port' => " . $newConf['port'] . ",
+	'prefix' => '" . $newConf['prefix'] . "'
+);
+?>");
+		fclose($file);
+	}
 }
 ?>

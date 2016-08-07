@@ -8,8 +8,8 @@
 
 class DB{
 	public $conn;
-	private $dbConf;
 	public $func;
+	public $dbConf;	
 	
 	public function __construct($dbConf,$func){
 		//new一个对象时打开数据库连接
@@ -63,8 +63,20 @@ class DB{
 		return $sql->fetch_array()['value'];
 	}
 	
-	public function getMsg(){
+	public function getMsgRow(){
 		return $this->query("select * from " . $this->func->getPre("msg"));
+	}
+	
+	public function getUserRow(){
+		return $this->query("select * from " . $this->func->getPre("users"));
+	}
+	
+	public function getGroupRow(){
+		return $this->query("select * from " . $this->func->getPre("group"));
+	}
+	
+	public function getConfigRow(){
+		return $this->query("select * from " . $this->func->getPre("config"));
 	}
 	
 	public function getFormat(){
@@ -81,6 +93,13 @@ class DB{
 		}
 		
 		return $format;
+	}
+	
+	public function updateConfig($name,$value,$theme){
+		//修改设置
+		$sql = $this->query("update "  . $this->func->getPre("config") . " set value = '" . $value . "' where name = " . $name);
+		
+		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
 	}
 	
 	public function updateMsg($name,$value,$id,$theme){
@@ -120,21 +139,25 @@ class DB{
 		//修改用户所在组
 		
 		//取值
-		$selectUser = $user;
+		$selectUser = $addUser = $user;
 		$oldGroup = $this->getUserGroup($user);
 		
 		$sql = $this->query("select * from " . $this->func->getPre("group") . " where name='" . $oldGroup . "'");
-		$members = $sql->fetch_assoc()['member'];
+		$oldGroupMembers = $sql->fetch_assoc()['member'];
 		
 		$sql = $this->query("select * from " . $this->func->getPre("group") . " where name='" . $newGroup . "'");
-		$newMembers = $sql->fetch_assoc()['member'] . "," . $user;
+		$newGroupMembers = $sql->fetch_assoc()['member'];
+		
+		//添加user
+		if ($newGroupMembers != "") $addUser = "," . $user;
+		$newMembers = $newGroupMembers . $addUser;
 		
 		//替换user
-		if (strpos($members,$user) !== 0) $selectUser = "," . $user;
-		$members = str_replace($selectUser,"",$members);
+		if (strpos($oldGroupMembers,$user) !== 0) $selectUser = "," . $user;
+		$oldMembers = str_replace($selectUser,"",$oldGroupMembers);
 		
 		//更新数据库
-		$sql = $this->query("update "  . $this->func->getPre("group") . " set member = '" . $members . "' where name = " . $oldGroup);
+		$sql = $this->query("update "  . $this->func->getPre("group") . " set member = '" . $oldMembers . "' where name = " . $oldGroup);
 		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
 		
 		$sql = $this->query("update "  . $this->func->getPre("group") . " set member = '" . $newMembers . "' where name = " . $newGroup);
@@ -144,14 +167,14 @@ class DB{
 		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
 	}
 	
-	public function createMsg($group,$members = null,$permission = null,$theme){
+	public function createGroup($group,$members = null,$permission = null,$theme){
 		//创建组
 		$sql = $this->query("insert into " . $this->func->getPre("group") . " values('" . $group . "','" . $members . "','" . $permission . "')");
 		
 		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
 	}
 	
-	public function deleteMsg($group,$theme){
+	public function deleteGroup($group,$theme){
 		//删除组
 		$sql = $this->query("delete from " . $this->func->getPre("group") . " where name = " . $group);
 		
@@ -164,7 +187,7 @@ class DB{
 		return $sql->fetch_assoc()['permission'];
 	}
 	
-	public function updateMsg($group,$permission,$theme){
+	public function updateGroupPerm($group,$permission,$theme){
 		//修改组权限
 		$sql = $this->query("update "  . $this->func->getPre("group") . " set permission = '" . $permission . "' where name = " . $permission);
 		
@@ -174,6 +197,55 @@ class DB{
 	public function getUserPerm($user){
 		//取得用户权限
 		return $this->getGroupPerm($this->getUserGroup($user));
+	}
+	
+	public function addUser($username,$password,$group,$theme){
+		//添加用户
+		
+		//取得旧群组值
+		$addUser = $username;
+		$sql = $this->query("select * from " . $this->func->getPre("group") . " where name='" . $group . "'");
+		$groupMembers = $sql->fetch_assoc()['member'];
+		
+		//添加user
+		if ($groupMembers != "") $addUser = "," . $username;
+		$newMembers = $groupMembers . $addUser;
+		
+		//更新数据库
+		$sql = $this->query("insert into " . $this->func->getPre("users") . " values(null,'" . $username . "','" . md5($password) . "','" . $group . "')");
+		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
+		
+		$sql = $this->query("update "  . $this->func->getPre("group") . " set member = '" . $newMembers . "' where name = '" . $group . "'");
+		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
+	}
+	
+	public function deleteUser($username,$theme){
+		//删除组
+		
+		//取值
+		$selectUser = $user;
+		$oldGroup = $this->getUserGroup($user);
+		
+		$sql = $this->query("select * from " . $this->func->getPre("group") . " where name='" . $oldGroup . "'");
+		$oldGroupMembers = $sql->fetch_assoc()['member'];
+		
+		//替换user
+		if (strpos($oldGroupMembers,$user) !== 0) $selectUser = "," . $user;
+		$oldMembers = str_replace($selectUser,"",$oldGroupMembers);
+		
+		//更新数据库
+		$sql = $this->query("update "  . $this->func->getPre("group") . " set member = '" . $oldMembers . "' where name = " . $oldGroup);
+		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
+		
+		$sql = $this->query("delete from " . $this->func->getPre("users") . " where username = " . $username);
+		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
+	}
+	
+	public function updateUserPassword($username,$newPassword,$theme){
+		//修改密码
+		$sql = $this->query("update "  . $this->func->getPre("users") . " set password = '" . md5($newPassword) . "' where username = " . $username);
+		
+		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
 	}
 }
 ?>

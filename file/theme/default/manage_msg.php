@@ -11,16 +11,16 @@
 ?>
 <?php include "header.php"; ?>
 <?php 
-	if ($_SESSION[$this->func->getPre('username')] == "visitor"){
-		$this->divAgc("未登录！");
-		include "footer.php";
-		exit;
-	}
+if (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"msg") === false){
+	$this->divAgc("权限不足！");
+	include "footer.php";
+	exit;
+}
 ?>
 <?php include "manage_header.php"; ?>
 
 <?php 
-$result = $this->db->getMsg();
+$result = $this->db->getMsgRow();
 $id = 0;
 
 if ($result->num_rows > 0) $maxline = $result->num_rows + 1; else $maxline = 1;
@@ -42,8 +42,6 @@ for ($i=1;$i<$maxline;$i++){
 		<th>时间</th>
 		<th>操作</th>
 	</tr>
-	
-	<br />
 	
 	<!-- 数据库中信息 -->
 	<?php for ($i=1;$i<$maxline;$i++){ ?>
@@ -77,5 +75,7 @@ for ($i=1;$i<$maxline;$i++){
 		</form>
 	</tr>
 </table>
+
+<br />
 
 <?php include "footer.php" ?>

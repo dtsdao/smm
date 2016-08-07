@@ -9,7 +9,9 @@
 //接收传入数据
 $username = $_POST['username'];
 $password = $_POST['password'];
-$new_pwd = $_POST['new_password'];
+$newPwd = $_POST['new_password'];
+$newPwdConfirm = $_POST['new_pwd_conf'];
+$group = $_POST['group'];
 
 switch($_REQUEST['action']){
 	case '登录':
@@ -47,11 +49,66 @@ switch($_REQUEST['action']){
 		}
 		break;
 	case '注册':
-	case '修改密码':
+		if ($db->getConfig("allow_reg") == "off"){
+			$theme->divAgc("不允许注册！");
+			break;
+		}
+		
+		$db->addUser($username,$password,$db->getConfig("default_group"),$theme);
+		$_SESSION[$func->getPre('username')] = $username;
+		$_SESSION[$func->getPre('times')] = 0;
+		
+		$func->turn("manage.php");
+		break;
 	case '添加用户':
+		if (strpos($db->getUserPerm($_SESSION[$func->getPre('username')]),"users") === false){
+			$theme->divAgc("权限不足！");
+			break;
+		}
+		
+		$db->addUser($username,$password,$group,$theme);
+		
+		$theme->divAgc("添加用户成功！");
+		break;
+	case '修改密码':
+		if ((strpos($db->getUserPerm($_SESSION[$func->getPre('username')]),"users") === false) && ($_SESSION[$func->getPre('username')] !== $username)){
+			$theme->divAgc("权限不足！");
+			break;
+		}
+		
+		if (!$db->checkPwd($_SESSION[$func->getPre('username')],$password)){
+			$theme->divAgc("旧密码错误！");
+			break;
+		}
+		
+		if (($_SESSION[$func->getPre('username')] !== $username) && ($newPwd != $newPwdConfirm)){
+			$theme->divAgc("两次输入的密码不一致！");
+			break;
+		}
+		
+		$db->updateUserPassword($username,$newPwd,$theme);
+		$theme->divAgc("修改成功！");
+		break;
+	case '修改分组':
+		if (strpos($db->getUserPerm($_SESSION[$func->getPre('username')]),"users") === false){
+			$theme->divAgc("权限不足！");
+			break;
+		}
+		
+		$db->updateUserGroup($username,$group,$theme);
+		$theme->divAgc("修改成功！");
+		break;
+	case '删除用户':
+		if (strpos($db->getUserPerm($_SESSION[$func->getPre('username')]),"users") === false){
+			$theme->divAgc("权限不足！");
+			break;
+		}
+		
+		$db->deleteUser($username,$theme);
+		$theme->divAgc("删除成功！");
+		break;
 	default:
 		$theme->divAgc("没有传入操作！请检查主题文件！");
 		break;
-		exit;
 }
 ?>
