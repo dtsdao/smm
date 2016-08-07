@@ -29,7 +29,6 @@ switch($kind){
 	default:
 		$theme->divAgc("没有传入引用类别！请检查主题文件！");
 		break;
-		exit;
 }
 
 //输出html文件结束

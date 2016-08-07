@@ -49,7 +49,7 @@ class DB{
 			else return false;
 	}
 	
-	private function query($query){
+	public function query($query){
 		$sql = $this->conn->query($query);
 		$this->checkError();
 		
