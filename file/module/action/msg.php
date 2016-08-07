@@ -22,10 +22,10 @@ switch($_REQUEST['action']){
 		}
 		
 		foreach ($db->getFormat() as $sign){
-			$db->updateMsg($sign,$msg[$sign],$id);
+			$db->updateMsg($sign,$msg[$sign],$id,$theme);
 		}
-		$db->updateMsg("author",$_SESSION[$func->getPre('username')],$id);
-		$db->updateMsg("time",date("Y-m-d"),$id);
+		$db->updateMsg("author",$_SESSION[$func->getPre('username')],$id,$theme);
+		$db->updateMsg("time",date("Y-m-d"),$id,$theme);
 		
 		$theme->divAgc("修改成功！");
 		break;
