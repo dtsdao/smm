@@ -59,8 +59,8 @@ class DB{
 	public function getConfig($name){
 		//获取设置
 		$sql = $this->query("select value from " . $this->func->getPre("config") . " where name='" . $name . "'");
-		
-		return $sql->fetch_array()['value'];
+		$getResult = $sql->fetch_assoc();
+		return $getResult['value'];
 	}
 	
 	public function getMsgRow(){
@@ -128,10 +128,12 @@ class DB{
 		$sql = $this->query("select * from " . $this->func->getPre("users") . " where username='" . $user . "'");
 		if ($sql->num_rows == 0) return "visitor";
 		
-		$getGroup = $sql->fetch_assoc()['group'];
+		$getResult = $sql->fetch_assoc();
+		$getGroup = $getResult['group'];
 		
 		$sql = $this->query("select * from " . $this->func->getPre("group") . " where name='" . $getGroup . "'");
-		if (strpos($sql->fetch_assoc()['member'],$user) !== false) return $getGroup;
+		$getResult = $sql->fetch_assoc();
+		if (strpos($getResult['member'],$user) !== false) return $getGroup;
 			else return "visitor";
 	}
 	
@@ -143,10 +145,12 @@ class DB{
 		$oldGroup = $this->getUserGroup($user);
 		
 		$sql = $this->query("select * from " . $this->func->getPre("group") . " where name='" . $oldGroup . "'");
-		$oldGroupMembers = $sql->fetch_assoc()['member'];
+		$getResult = $sql->fetch_assoc();
+		$oldGroupMembers = $getResult['member'];
 		
 		$sql = $this->query("select * from " . $this->func->getPre("group") . " where name='" . $newGroup . "'");
-		$newGroupMembers = $sql->fetch_assoc()['member'];
+		$getResult = $sql->fetch_assoc();
+		$newGroupMembers = $getResult['member'];
 		
 		//添加user
 		if ($newGroupMembers != "") $addUser = "," . $user;
@@ -184,7 +188,8 @@ class DB{
 	public function getGroupPerm($group){
 		//取得组权限
 		$sql = $this->query("select * from " . $this->func->getPre("group") . " where name='" . $group . "'");
-		return $sql->fetch_assoc()['permission'];
+		$getResult = $sql->fetch_assoc();
+		return $getResult['permission'];
 	}
 	
 	public function updateGroupPerm($group,$permission,$theme){
@@ -205,7 +210,8 @@ class DB{
 		//取得旧群组值
 		$addUser = $username;
 		$sql = $this->query("select * from " . $this->func->getPre("group") . " where name='" . $group . "'");
-		$groupMembers = $sql->fetch_assoc()['member'];
+		$getResult = $sql->fetch_assoc();
+		$groupMembers = $getResult['member'];
 		
 		//添加user
 		if ($groupMembers != "") $addUser = "," . $username;
@@ -227,7 +233,8 @@ class DB{
 		$oldGroup = $this->getUserGroup($user);
 		
 		$sql = $this->query("select * from " . $this->func->getPre("group") . " where name='" . $oldGroup . "'");
-		$oldGroupMembers = $sql->fetch_assoc()['member'];
+		$getResult = $sql->fetch_assoc();
+		$oldGroupMembers = $getResult['member'];
 		
 		//替换user
 		if (strpos($oldGroupMembers,$user) !== 0) $selectUser = "," . $user;
