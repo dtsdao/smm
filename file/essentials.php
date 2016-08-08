@@ -6,6 +6,8 @@
 //By DTSDAO
 //Package - Essentials
 
+ini_set('error_reporting','E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE');
+
 //import
 include "config.php";
 include "module/database.php";

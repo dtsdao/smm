@@ -6,6 +6,8 @@
 //By DTSDAO
 //Install
 
+ini_set('error_reporting','E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE');
+
 if (!$_POST['step']) $title = "INDEX"; else $title = strtoupper($_POST['step']);
 
 ?>

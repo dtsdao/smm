@@ -18,6 +18,7 @@ $id = $_POST['id'];
 $msg = array();
 foreach ($db->getFormat() as $sign){
 	if (!get_magic_quotes_gpc()) $msg[$sign] = addslashes($_POST[$sign]);
+		else $msg[$sign] = $_POST[$sign];
 }
 
 switch($_REQUEST['action']){
