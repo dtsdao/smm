@@ -226,18 +226,18 @@ class DB{
 	}
 	
 	public function deleteUser($username,$theme){
-		//删除组
+		//删除用户
 		
 		//取值
-		$selectUser = $user;
-		$oldGroup = $this->getUserGroup($user);
+		$selectUser = $username;
+		$oldGroup = $this->getUserGroup($username);
 		
 		$sql = $this->query("select * from " . $this->func->getPre("group") . " where name='" . $oldGroup . "'");
 		$getResult = $sql->fetch_assoc();
 		$oldGroupMembers = $getResult['member'];
 		
 		//替换user
-		if (strpos($oldGroupMembers,$user) !== 0) $selectUser = "," . $user;
+		if (strpos($oldGroupMembers,$username) !== 0) $selectUser = "," . $username;
 		$oldMembers = str_replace($selectUser,"",$oldGroupMembers);
 		
 		//更新数据库
