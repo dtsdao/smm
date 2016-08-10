@@ -244,7 +244,7 @@ class DB{
 		$sql = $this->query("update "  . $this->func->getPre("group") . " set member = '" . $oldMembers . "' where name='" . $oldGroup . "'");
 		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
 		
-		$sql = $this->query("delete from " . $this->func->getPre("users") . " where username = " . $username);
+		$sql = $this->query("delete from " . $this->func->getPre("users") . " where username='" . $username . "'");
 		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
 	}
 	
