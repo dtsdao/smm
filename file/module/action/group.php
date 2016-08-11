@@ -15,7 +15,7 @@ if (strpos($db->getUserPerm($_SESSION[$func->getPre('username')]),"users") === f
 
 //接收传入数据
 $perm = $_POST['permission'];
-$group = $_POST['group'];
+$group = htmlspecialchars($_POST['group']);
 $members = $_POST['members'];
 
 switch($_REQUEST['action']){
