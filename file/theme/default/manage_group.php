@@ -9,7 +9,9 @@
 //Manage - Group
 
 ?>
-<?php include "header.php" ?>
+<?php include "header.php"; ?>
+<?php include "manage_header.php" ?>
+
 <?php 
 if (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"users") === false){
 	$this->divAgc("权限不足！");
@@ -17,7 +19,6 @@ if (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"users")
 	exit;
 }
 ?>
-<?php include "manage_header.php" ?>
 
 <?php 
 $result = $this->db->getGroupRow();

@@ -10,6 +10,8 @@
 
 ?>
 <?php include "header.php"; ?>
+<?php include "manage_header.php"; ?>
+
 <?php 
 if (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"config") === false){
 	$this->divAgc("权限不足！");
@@ -17,7 +19,6 @@ if (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"config"
 	exit;
 }
 ?>
-<?php include "manage_header.php"; ?>
 
 <?php 
 $result = $this->db->getConfigRow();
