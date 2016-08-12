@@ -161,13 +161,13 @@ class DB{
 		$oldMembers = str_replace($selectUser,"",$oldGroupMembers);
 		
 		//更新数据库
-		$sql = $this->query("update "  . $this->func->getPre("group") . " set member = '" . $oldMembers . "' where name='" . $oldGroup . "'");
+		$sql = $this->query("update "  . $this->func->getPre("group") . " set member='" . $oldMembers . "' where name='" . $oldGroup . "'");
 		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
 		
-		$sql = $this->query("update "  . $this->func->getPre("group") . " set member = '" . $newMembers . "' where name='" . $newGroup . "'");
+		$sql = $this->query("update "  . $this->func->getPre("group") . " set member='" . $newMembers . "' where name='" . $newGroup . "'");
 		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
 		
-		$sql = $this->query("update "  . $this->func->getPre("users") . " set group = '" . $newGroup . "' where username='" . $user . "'");
+		$sql = $this->query("update "  . $this->func->getPre("users") . " set groupname='" . $newGroup . "' where username='" . $user . "'");
 		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
 	}
 	
@@ -194,7 +194,7 @@ class DB{
 	
 	public function updateGroupPerm($group,$permission,$theme){
 		//修改组权限
-		$sql = $this->query("update "  . $this->func->getPre("group") . " set permission='" . $permission . "' where name='" . $permission . "'");
+		$sql = $this->query("update "  . $this->func->getPre("group") . " set permission='" . $permission . "' where name='" . $group . "'");
 		
 		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
 	}
