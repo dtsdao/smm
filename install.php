@@ -110,7 +110,7 @@ if (!$_POST['step']) $title = "INDEX"; else $title = strtoupper($_POST['step']);
 					
 					$conn->query("CREATE TABLE `" . $_POST['prefix'] . "config" . "` (`name` varchar(100) NOT NULL,`value` varchar(500) NOT NULL,PRIMARY KEY (`name`))");
 					$conn->query("CREATE TABLE `" . $_POST['prefix'] . "group" . "` (`name` varchar(64) NOT NULL,`member` varchar(64) DEFAULT NULL,`permission` varchar(500) DEFAULT NULL,PRIMARY KEY (`name`))");
-					$conn->query("CREATE TABLE `" . $_POST['prefix'] . "users" . "` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,`username` varchar(64) NOT NULL,`password` varchar(40) NOT NULL,`group` varchar(64) NOT NULL,PRIMARY KEY (`id`,`username`))");
+					$conn->query("CREATE TABLE `" . $_POST['prefix'] . "users" . "` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,`username` varchar(64) NOT NULL,`password` varchar(40) NOT NULL,`groupname` varchar(64) NOT NULL,PRIMARY KEY (`id`,`username`))");
 					
 					$conn->close();
 					?>

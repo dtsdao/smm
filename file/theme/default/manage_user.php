@@ -71,7 +71,7 @@ if (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"users")
 					<td><?php $id = $rows[$i]['id']; echo $id; ?></td>
 					<td><?php echo $rows[$i]['username']; ?></td>
 					<td><input name="password"></td>
-					<td><input name="group" value="<?php echo $rows[$i]['group']; ?>"></td>
+					<td><input name="group" value="<?php echo $rows[$i]['groupname']; ?>"></td>
 					<td>
 						<input name="action" type="submit" value="修改密码">
 						<input name="action" type="submit" value="修改分组">

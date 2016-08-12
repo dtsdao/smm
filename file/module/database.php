@@ -129,7 +129,7 @@ class DB{
 		if ($sql->num_rows == 0) return "visitor";
 		
 		$getResult = $sql->fetch_assoc();
-		$getGroup = $getResult['group'];
+		$getGroup = $getResult['groupname'];
 		
 		$sql = $this->query("select * from " . $this->func->getPre("group") . " where name='" . $getGroup . "'");
 		$getResult = $sql->fetch_assoc();
