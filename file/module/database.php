@@ -99,14 +99,14 @@ class DB{
 		//修改设置
 		$sql = $this->query("update "  . $this->func->getPre("config") . " set value = '" . $value . "' where name='" . $name . "'");
 		
-		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
+		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("数据一致或数据库出错！");
 	}
 	
 	public function updateMsg($name,$value,$id,$theme){
 		//修改条目
 		$sql = $this->query("update "  . $this->func->getPre("msg") . " set " . $name . " = '" . $value . "' where id='" . $id . "'");
 		
-		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
+		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("未成功修改序号为" . $id . "的" . $name . "项！");
 	}
 	
 	public function createMsg($list,$theme){
@@ -162,13 +162,13 @@ class DB{
 		
 		//更新数据库
 		$sql = $this->query("update "  . $this->func->getPre("group") . " set member='" . $oldMembers . "' where name='" . $oldGroup . "'");
-		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
+		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("数据一致或数据库出错！");
 		
 		$sql = $this->query("update "  . $this->func->getPre("group") . " set member='" . $newMembers . "' where name='" . $newGroup . "'");
-		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
+		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("数据一致或数据库出错！");
 		
 		$sql = $this->query("update "  . $this->func->getPre("users") . " set groupname='" . $newGroup . "' where username='" . $user . "'");
-		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
+		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("数据一致或数据库出错！");
 	}
 	
 	public function createGroup($group,$members = null,$permission = null,$theme){
@@ -196,7 +196,7 @@ class DB{
 		//修改组权限
 		$sql = $this->query("update "  . $this->func->getPre("group") . " set permission='" . $permission . "' where name='" . $group . "'");
 		
-		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
+		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("数据一致或数据库出错！");
 	}
 	
 	public function getUserPerm($user){
@@ -252,7 +252,7 @@ class DB{
 		//修改密码
 		$sql = $this->query("update "  . $this->func->getPre("users") . " set password = '" . md5($newPassword) . "' where username='" . $username . "'");
 		
-		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("出了点问题，请检查数据库！");
+		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("未成功修改用户" . $username . "的密码");
 	}
 }
 ?>

@@ -22,7 +22,7 @@ if (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"msg") =
 
 <?php 
 $result = $this->db->getMsgRow();
-$id = 0;
+$maxid = 0;
 
 if ($result->num_rows > 0) $maxline = $result->num_rows + 1; else $maxline = 1;
 //格式化信息
@@ -46,10 +46,11 @@ for ($i=1;$i<$maxline;$i++){
 	
 	<!-- 数据库中信息 -->
 	<?php for ($i=1;$i<$maxline;$i++){ ?>
+		<?php if ($rows[$i]['id'] > $maxid) $maxid = $rows[$i]['id']; ?>
 		<tr><form method="POST" action="action.php">
 			<input type="hidden" name="kind" value="msg">
-			<input type="hidden" name="id" value="<?php $id = $rows[$i]['id']; echo $id; ?>">
-			<td><?php echo $id; ?></td>
+			<input type="hidden" name="id" value="<?php echo $rows[$i]['id']; ?>">
+			<td><?php echo $rows[$i]['id']; ?></td>
 		<?php foreach ($this->db->getFormat() as $sign){ ?>
 				<td><input name="<?php echo $sign; ?>" value="<?php echo $rows[$i][$sign]; ?>"></td>
 		<?php } ?>
