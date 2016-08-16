@@ -9,6 +9,11 @@
 //Manage - Header
 
 ?>
+<?php if ($_SESSION[$this->func->getPre('username')] == "visitor"){
+	$this->divAgc("不允许访客访问！");
+	include "footer.php";
+	exit;
+} ?>
 			<!-- HEAD -->
 			<table width="80%" border="1" align="center">
 			  <tr>
