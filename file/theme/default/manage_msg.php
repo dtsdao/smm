@@ -67,7 +67,7 @@ for ($i=1;$i<$maxline;$i++){
 	<tr>
 		<form method="POST" action="action.php">
 			<input type="hidden" name="kind" value="msg">
-			<td><?php echo $id + 1; ?></td>
+			<td><?php echo $maxid + 1; ?></td>
 			<?php foreach ($this->db->getFormat() as $sign){ ?>
 				<td><input name="<?php echo $sign; ?>"></td>
 			<?php } ?>
