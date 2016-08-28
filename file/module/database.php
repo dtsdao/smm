@@ -43,7 +43,7 @@ class DB{
 	
 	public function checkPwd($username,$password){
 		//检查密码
-		$sql = $this->query("select * from " . $this->func->getPre("users") . " where username='" . $username . "' and password=md5('" . $password . "')");
+		$sql = $this->query("select * from " . $this->func->getPre("users") . " where username='" . $username . "' and password='" . $this->func->mix($password) . "'");
 		
 		if ($sql->num_rows > 0) return true;
 			else return false;
@@ -218,7 +218,7 @@ class DB{
 		$newMembers = $groupMembers . $addUser;
 		
 		//更新数据库
-		$sql = $this->query("insert into " . $this->func->getPre("users") . " values(null,'" . $username . "','" . md5($password) . "','" . $group . "')");
+		$sql = $this->query("insert into " . $this->func->getPre("users") . " values(null,'" . $username . "','" . $this->func->mix($password) . "','" . $group . "')");
 		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("无法创建用户！");
 		
 		$sql = $this->query("update "  . $this->func->getPre("group") . " set member='" . $newMembers . "' where name='" . $group . "'");
@@ -250,7 +250,7 @@ class DB{
 	
 	public function updateUserPassword($username,$newPassword,$theme){
 		//修改密码
-		$sql = $this->query("update "  . $this->func->getPre("users") . " set password = '" . md5($newPassword) . "' where username='" . $username . "'");
+		$sql = $this->query("update "  . $this->func->getPre("users") . " set password = '" . $this->func->mix($newPassword) . "' where username='" . $username . "'");
 		
 		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("未成功修改用户" . $username . "的密码");
 	}

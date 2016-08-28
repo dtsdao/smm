@@ -127,7 +127,7 @@ if (!$_POST['step']) $title = "INDEX"; else $title = strtoupper($_POST['step']);
 					<?php
 					break;
 				case 'config':
-					$db->query("insert into " . $func->getPre("users") . " values(null,'" . $_POST['username'] . "',md5('" . $_POST['password'] . "'),'admin')");
+					$db->query("insert into " . $func->getPre("users") . " values(null,'" . $_POST['username'] . "','" . $func->mix($_POST['password']) . "),'admin')");
 					$db->query("insert into " . $func->getPre("group") . " values('admin','" . $_POST['username'] . "','msg,users,config')");
 					$db->query("insert into " . $func->getPre("group") . " values('visitor','visitor',null)");
 					

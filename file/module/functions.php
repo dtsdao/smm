@@ -13,6 +13,10 @@ class functions{
 		$this->dbConf = $dbConf;
 	}
 	
+	public function mix($raw){
+		return md5(sha1($this->getPre($raw)));
+	}
+	
 	//跳转页面
 	public function turn($page){
 		echo '<script>window.location.href="' . $page . '"</script>';
