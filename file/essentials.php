@@ -8,6 +8,15 @@
 
 ini_set('error_reporting','E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE');
 
+if (!file_exists("file/config.php")){
+	if (!file_exists("install.php")){
+		echo "<title>CONFIG_ERROR</title>\n";
+		echo "<div align=center>缺少配置文件！</div>";
+		exit;
+	}
+	header("Location: install.php");
+}
+
 //import
 include "config.php";
 include "module/database.php";

@@ -127,7 +127,7 @@ if (!$_POST['step']) $title = "INDEX"; else $title = strtoupper($_POST['step']);
 					<?php
 					break;
 				case 'config':
-					$db->query("insert into " . $func->getPre("users") . " values(null,'" . $_POST['username'] . "','" . $func->mix($_POST['password']) . "),'admin')");
+					$db->query("insert into " . $func->getPre("users") . " values(null,'" . $_POST['username'] . "','" . $func->mix($_POST['password']) . "','admin')");
 					$db->query("insert into " . $func->getPre("group") . " values('admin','" . $_POST['username'] . "','msg,users,config')");
 					$db->query("insert into " . $func->getPre("group") . " values('visitor','visitor',null)");
 					
@@ -202,6 +202,7 @@ if (!$_POST['step']) $title = "INDEX"; else $title = strtoupper($_POST['step']);
 							请严格按照文本框旁边的说明来填写<br />
 							由于自行乱填导致的任何后果概不负责<br />
 							错误代码及错误信息请自行百度，不要随便发issue<br />
+							出现错误后请务必删除file目录下config.php及删除所选数据库中生成的表<br />
 							感谢安装本软件<br />
 							2016.8.7<br />
 							DTSDAO
