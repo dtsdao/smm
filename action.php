@@ -31,6 +31,9 @@ switch($kind){
 		break;
 }
 
+//"返回"链接
+$theme->divAgc('<a href="' . $_SERVER['HTTP_REFERER'] . '">返回</a>');
+
 //输出html文件结束
 $theme = new THEME('footer',$db);
 
