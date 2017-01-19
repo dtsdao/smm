@@ -107,6 +107,16 @@ switch($_REQUEST['action']){
 		$db->deleteUser($username,$theme);
 		$theme->divAgc("删除成功！");
 		break;
+	case '建表':
+		if (strpos($db->getUserPerm($_SESSION[$func->getPre('username')]),"users") === false){
+			$theme->divAgc("权限不足！");
+			break;
+		}
+		
+		$db->createMsgTable($username);
+		
+		$theme->divAgc("建表成功！");
+		break;
 	default:
 		$theme->divAgc("没有传入操作！请检查主题文件！");
 		break;

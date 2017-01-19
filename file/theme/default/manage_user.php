@@ -76,6 +76,7 @@ if (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"users")
 						<input name="action" type="submit" value="修改密码">
 						<input name="action" type="submit" value="修改分组">
 						<input name="action" type="submit" value="删除用户">
+						<input name="action" type="submit" value="建表">
 					</td>
 				</form>
 			</tr>

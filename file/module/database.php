@@ -64,7 +64,7 @@ class DB{
 	}
 	
 	public function getMsgRow(){
-		return $this->query("select * from " . $this->func->getPre("msg"));
+		return $this->query("select * from " . $this->getMsgTable());
 	}
 	
 	public function getUserRow(){
@@ -104,21 +104,21 @@ class DB{
 	
 	public function updateMsg($name,$value,$id,$theme){
 		//修改条目
-		$sql = $this->query("update "  . $this->func->getPre("msg") . " set " . $name . " = '" . $value . "' where id='" . $id . "'");
+		$sql = $this->query("update "  . $this->getMsgTable() . " set " . $name . " = '" . $value . "' where id='" . $id . "'");
 		
 		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("未成功修改序号为" . $id . "的" . $name . "项！");
 	}
 	
 	public function createMsg($list,$theme){
 		//创建条目
-		$sql = $this->query("insert into " . $this->func->getPre("msg") . " values(" . $list . ")");
+		$sql = $this->query("insert into " . $this->getMsgTable() . " values(" . $list . ")");
 		
 		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("无法创建条目！");
 	}
 	
 	public function deleteMsg($id,$theme){
 		//删除条目
-		$sql = $this->query("delete from " . $this->func->getPre("msg") . " where id='" . $id . "'");
+		$sql = $this->query("delete from " . $this->getMsgTable() . " where id='" . $id . "'");
 		
 		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("无法删除条目！");
 	}
@@ -218,6 +218,8 @@ class DB{
 		$newMembers = $groupMembers . $addUser;
 		
 		//更新数据库
+		if ($this->getConfig('personal') == "on") $this->createMsgTable($username);
+		
 		$sql = $this->query("insert into " . $this->func->getPre("users") . " values(null,'" . $username . "','" . $this->func->mix($password) . "','" . $group . "')");
 		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("无法创建用户！");
 		
@@ -253,6 +255,23 @@ class DB{
 		$sql = $this->query("update "  . $this->func->getPre("users") . " set password = '" . $this->func->mix($newPassword) . "' where username='" . $username . "'");
 		
 		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("未成功修改用户" . $username . "的密码");
+	}
+	
+	public function createMsgTable($username){
+		//创建信息表
+		$format = $this->getFormat();
+		
+		foreach ($format as $sign){
+			$list .= ",`" . $sign . "` varchar(500) DEFAULT NULL";
+		}
+		
+		$sql = $this->query("CREATE TABLE `" . $this->func->getPre("msg_" . $username) . "` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT" . $list . ",`author` varchar(64) NOT NULL,`time` date NOT NULL,PRIMARY KEY (`id`))");
+		if (!$sql) echo "<div align=center>" . "未成功创建用户" . $username . "的信息表" . "</div>";
+	}
+	
+	private function getMsgTable(){
+		if ($this->getConfig('personal') == "on") return $this->func->getPre("msg_" . $_SESSION[$this->func->getPre('username')]);
+			else return $this->func->getPre("msg_system");
 	}
 }
 ?>

@@ -130,7 +130,7 @@ if (!$_POST['step']) $title = "INDEX"; else $title = strtoupper($_POST['step']);
 					$db->query("insert into " . $func->getPre("users") . " values(null,'" . $_POST['username'] . "','" . $func->mix($_POST['password']) . "','admin')");
 					$db->query("insert into " . $func->getPre("group") . " values('admin','" . $_POST['username'] . "','msg,users,config')");
 					$db->query("insert into " . $func->getPre("group") . " values('visitor','visitor',null)");
-					
+					$_SESSION[$func->getPre('username')] = $_POST['username'];
 					?>
 						<h1 align=center>设置</h1>
 						<div align=center>
@@ -148,6 +148,8 @@ if (!$_POST['step']) $title = "INDEX"; else $title = strtoupper($_POST['step']);
 								<div class="text">格式</div><br />
 							default_group:<input name="default_group" value="visitor"><br />
 								<div class="text">注册后默认的组</div><br />
+							personal:<input name="personal" value="off"><br />
+								<div class="text">是否开启单用户单表(on/off)</div><br />
 							<input type="submit" value="保存">
 						</form>
 						</div>
@@ -160,24 +162,10 @@ if (!$_POST['step']) $title = "INDEX"; else $title = strtoupper($_POST['step']);
 					$db->query("INSERT INTO `" . $func->getPre("config") . "` (`name`, `value`) VALUES ('object_name', '" . $_POST['object_name'] . "')");
 					$db->query("INSERT INTO `" . $func->getPre("config") . "` (`name`, `value`) VALUES ('format', '" . $_POST['format'] . "')");
 					$db->query("INSERT INTO `" . $func->getPre("config") . "` (`name`, `value`) VALUES ('default_group', '" . $_POST['default_group'] . "')");
+					$db->query("INSERT INTO `" . $func->getPre("config") . "` (`name`, `value`) VALUES ('personal', '" . $_POST['personal'] . "')");
 					
-					$i = 0;
-					$format = array();
-					$native = $_POST['format'];
-					
-					$token = strtok($native,",");
-					while ($token !== false){
-						$format[$i] = $token;
-						$token = strtok(",");
-						$i++;
-					}
-					
-					foreach ($format as $sign){
-						$list .= ",`" . $sign . "` varchar(500) DEFAULT NULL";
-					}
-					
-					$db->query("CREATE TABLE `" . $func->getPre("msg") . "` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT" . $list . ",`author` varchar(64) NOT NULL,`time` date NOT NULL,PRIMARY KEY (`id`))");
-
+					if ($db->getConfig('personal') == "on") $db->createMsgTable($_SESSION[$func->getPre('username')]);
+					$db->createMsgTable("system");
 					?>
 						<h1 align=center>完成</h1>
 						<div align=center>
