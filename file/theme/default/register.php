@@ -10,6 +10,13 @@
 
 ?>
 <?php include "header.php"; ?>
+<?php 
+if ($this->db->getConfig("allow_reg") == "off"){
+	$this->divAgc("不允许注册！");
+	include "footer.php";
+	exit;
+}
+?>
 
 			<h1 align=center>注册</h1>
 			<div align=center>
@@ -22,4 +29,4 @@
 			</form>
 			</div>
 
-<?php include "footer.php" ?>
+<?php include "footer.php"; ?>

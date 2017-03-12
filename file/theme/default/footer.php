@@ -10,7 +10,7 @@
 
 ?>
 			<div align=center id="footer">
-				<?php echo $this->objectName; ?> &copy; 2016
+				<?php echo $this->objectName; ?> &copy; <?php echo date('Y'); ?>
 				<br />
 				Theme:<?php echo $theme; ?>
 			</div>
