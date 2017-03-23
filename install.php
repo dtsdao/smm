@@ -6,6 +6,11 @@
 //By DTSDAO
 //Install
 
+if (file_exists("file/config.php")){
+	header("Location: index.php");
+	exit;
+} 
+
 ini_set('error_reporting','E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE');
 
 if (!$_POST['step']) $title = "INDEX"; else $title = strtoupper($_POST['step']);
@@ -178,10 +183,6 @@ if (!$_POST['step']) $title = "INDEX"; else $title = strtoupper($_POST['step']);
 					break;
 				case 'index':
 				default:
-					if (file_exists("file/config.php")){
-						header("Location: index.php");
-						exit;
-					} 
 					?>
 						<h1 align=center>安装</h1>
 						<div align=center>
