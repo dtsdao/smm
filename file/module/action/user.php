@@ -7,7 +7,7 @@
 //Action - User
 
 //接收传入数据
-$username = htmlspecialchars($_POST['username']);
+$username = $_POST['username'];
 $password = $_POST['password'];
 $newPwd = $_POST['new_password'];
 $newPwdConfirm = $_POST['new_pwd_conf'];

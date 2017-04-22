@@ -17,8 +17,7 @@ if (strpos($db->getUserPerm($_SESSION[$func->getPre('username')]),"msg") === fal
 $id = $_POST['id'];
 $msg = array();
 foreach ($db->getFormat() as $sign){
-	if (!get_magic_quotes_gpc()) $msg[$sign] = addslashes(htmlspecialchars($_POST[$sign]));
-		else $msg[$sign] = htmlspecialchars($_POST[$sign]);
+	$msg[$sign] = $_POST[$sign];
 }
 
 switch($_REQUEST['action']){

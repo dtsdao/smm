@@ -27,6 +27,12 @@ include "theme/load.php";
 $func = new functions($dbConf);
 $db = new DB($dbConf,$func);
 
+//de-xss
+foreach (array_keys($_POST) as $sign){
+	if (!get_magic_quotes_gpc()) $_POST[$sign] = addslashes(htmlspecialchars($_POST[$sign]));
+		else $_POST[$sign] = htmlspecialchars($_POST[$sign]);
+}
+
 //session
 session_start();
 if (!$_SESSION[$func->getPre('username')]) $_SESSION[$func->getPre('username')] = "visitor";

@@ -15,6 +15,10 @@ ini_set('error_reporting','E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE');
 
 if (!$_POST['step']) $title = "INDEX"; else $title = strtoupper($_POST['step']);
 
+foreach (array_keys($_POST) as $sign){
+	if (!get_magic_quotes_gpc()) $_POST[$sign] = addslashes(htmlspecialchars($_POST[$sign]));
+		else $_POST[$sign] = htmlspecialchars($_POST[$sign]);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -55,7 +59,16 @@ if (!$_POST['step']) $title = "INDEX"; else $title = strtoupper($_POST['step']);
 		<div>
 			<?php
 			if (($_POST['step'] == "config") || ($_POST['step'] == "finish")){
-				include "file/essentials.php";
+				include "module/database.php";
+				include "module/functions.php";
+
+				//classes
+				$func = new functions($dbConf);
+				$db = new DB($dbConf,$func);
+
+				//session
+				session_start();
+				if (!$_SESSION[$func->getPre('username')]) $_SESSION[$func->getPre('username')] = "visitor";
 			}
 
 			switch($_POST['step']){

@@ -52,7 +52,7 @@ for ($i=1;$i<$maxline;$i++){
 			<input type="hidden" name="id" value="<?php echo $rows[$i]['id']; ?>">
 			<td><?php echo $rows[$i]['id']; ?></td>
 		<?php foreach ($this->db->getFormat() as $sign){ ?>
-				<td><input name="<?php echo $sign; ?>" value="<?php echo $rows[$i][$sign]; ?>"></td>
+				<td><input name="<?php echo $sign; ?>" value="<?php echo $rows[$i][$sign]; ?>" width="100%"></td>
 		<?php } ?>
 			<td><?php echo $rows[$i]['author']; ?></td>
 			<td><?php echo $rows[$i]['time']; ?></td>
@@ -69,7 +69,7 @@ for ($i=1;$i<$maxline;$i++){
 			<input type="hidden" name="kind" value="msg">
 			<td><?php echo $maxid + 1; ?></td>
 			<?php foreach ($this->db->getFormat() as $sign){ ?>
-				<td><input name="<?php echo $sign; ?>"></td>
+				<td><input name="<?php echo $sign; ?>" width="100%"></td>
 			<?php } ?>
 			<td><?php echo $_SESSION[$this->func->getPre('username')]; ?></td>
 			<td><?php echo date("Y-m-d"); ?></td>
