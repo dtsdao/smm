@@ -6,10 +6,10 @@
 //By DTSDAO
 //Install
 
-if (file_exists("file/config.php")){
+if (file_exists("file/config.php")&&($_POST['step'] != "config")&&($_POST['step'] != "finish")){
 	header("Location: index.php");
 	exit;
-} 
+}
 
 ini_set('error_reporting','E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE');
 
@@ -59,8 +59,9 @@ foreach (array_keys($_POST) as $sign){
 		<div>
 			<?php
 			if (($_POST['step'] == "config") || ($_POST['step'] == "finish")){
-				include "module/database.php";
-				include "module/functions.php";
+				include "file/config.php";
+				include "file/module/database.php";
+				include "file/module/functions.php";
 
 				//classes
 				$func = new functions($dbConf);

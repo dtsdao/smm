@@ -81,7 +81,7 @@ switch($_REQUEST['action']){
 			break;
 		}
 		
-		if (($_SESSION[$func->getPre('username')] !== $username) && ($newPwd != $newPwdConfirm)){
+		if (($_SESSION[$func->getPre('username')] == $username) && ($newPwd != $newPwdConfirm)){
 			$theme->divAgc("两次输入的密码不一致！");
 			break;
 		}

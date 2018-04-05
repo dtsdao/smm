@@ -13,7 +13,7 @@
 <?php include "manage_header.php"; ?>
 
 <form action="action.php" method="POST">
-<input type="hidden" name="kind" value="users">
+<input type="hidden" name="kind" value="user">
 <input type="hidden" name="username" value="<?php echo $_SESSION[$this->func->getPre('username')]; ?>">
 	<table width="80%" border="1" align="center">
 		<!-- 表头 -->
@@ -43,13 +43,6 @@
 <?php 
 if (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"users") !== false){
 	$result = $this->db->getUserRow();
-
-	if ($result->num_rows > 0) $maxline = $result->num_rows + 1; else $maxline = 1;
-	//格式化信息
-	for ($i=1;$i<$maxline;$i++){
-		$row = $result->fetch_assoc();
-		$rows[$i] = $row;
-	}
 ?>
 	<table width="80%" border="1" align="center">
 		<!-- 表头 -->
@@ -63,15 +56,16 @@ if (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"users")
 		</tr>
 		
 		<!-- 取得数据库中信息 -->
-		<?php for ($i=1;$i<$maxline;$i++){ ?>
+		<?php while($row = $result->fetch_array()){ ?>
 			<tr>
 				<form action="action.php" method="POST">
 				<input type="hidden" name="kind" value="user">
-				<input type="hidden" name="username" value="<?php echo $rows[$i]['username']; ?>">
-					<td><?php $id = $rows[$i]['id']; echo $id; ?></td>
-					<td><?php echo $rows[$i]['username']; ?></td>
-					<td><input name="password"></td>
-					<td><input name="group" value="<?php echo $rows[$i]['groupname']; ?>"></td>
+				<input type="hidden" name="username" value="<?php echo $row['username']; ?>">
+					<td><?php $id = $row['id']; echo $id; ?></td>
+					<td><?php echo $row['username']; ?></td>
+					<td><?php if($row['username']!=$_SESSION[$this->func->getPre('username')]) {
+					?><input name="password"><?php }else echo "请在上方修改";?></td>
+					<td><input name="group" value="<?php echo $row['groupname']; ?>"></td>
 					<td>
 						<input name="action" type="submit" value="修改密码">
 						<input name="action" type="submit" value="修改分组">

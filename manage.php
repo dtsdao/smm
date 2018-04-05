@@ -19,8 +19,15 @@ switch($_GET['area']){
 		$page = new THEME("manage_config",$db);
 		break;
 	case "信息":
-	default:
 		$page = new THEME("manage_msg",$db);
+		break;
+	default:
+		if (strpos($db->getUserPerm($_SESSION[$func->getPre('username')]),"msg") === false){
+			$page = new THEME("manage_user",$db);
+		}else
+		{
+			$page = new THEME("manage_msg",$db);
+		}
 		break;
 }
 

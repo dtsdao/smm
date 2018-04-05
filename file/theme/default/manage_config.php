@@ -18,17 +18,7 @@ if (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"config"
 	include "footer.php";
 	exit;
 }
-?>
-
-<?php 
 $result = $this->db->getConfigRow();
-
-if ($result->num_rows > 0) $maxline = $result->num_rows + 1; else $maxline = 1;
-//格式化信息
-for ($i=1;$i<$maxline;$i++){
-	$row = $result->fetch_assoc();
-	$rows[$i] = $row;
-}
 ?>
 
 <table width="80%" border="1" align="center">
@@ -41,13 +31,13 @@ for ($i=1;$i<$maxline;$i++){
 	</tr>
 	
 	<!-- 取得数据库中信息 -->
-	<?php for ($i=1;$i<$maxline;$i++){ ?>
+	<?php while($row = $result->fetch_array()){ ?>
 		<tr>
 			<form action="action.php" method="POST">
 			<input type="hidden" name="kind" value="config">
-			<input type="hidden" name="name" value="<?php echo $rows[$i]['name']; ?>">
-				<td><?php echo $rows[$i]['name']; ?></td>
-				<td><input name="value" value="<?php echo $rows[$i]['value']; ?>"></td>
+			<input type="hidden" name="name" value="<?php echo $row['name']; ?>">
+				<td><?php echo $row['name']; ?></td>
+				<td><input name="value" value="<?php echo $row['value']; ?>"></td>
 				<td>
 					<input name="action"   type="submit" value="修改设置">
 				</td>
@@ -62,6 +52,7 @@ for ($i=1;$i<$maxline;$i++){
 
 <table width="80%" border="1" align="center">
 	<!-- 表头 -->
+	<form action="action.php" method="POST">
 	<tr>
 		<td width="10%" rowspan="8"><h1 align=center>数据库设置</h1></td>
 		<th width="40%">名称</th>
@@ -70,7 +61,6 @@ for ($i=1;$i<$maxline;$i++){
 	</tr>
 	
 	<!-- 信息 -->
-	<form action="action.php" method="POST">
 	<input type="hidden" name="kind" value="config">
 		<tr>
 			<td>地址</td>

@@ -37,6 +37,8 @@ class DB{
 		if (mysqli_errno($this->conn)){
 			echo "<title>DATABASE_ERROR</title>\n";
 			echo "<div align=center>" . mysqli_errno($this->conn) . " " . mysqli_error($this->conn) . "</div>";
+			if(mysqli_errno($this->conn) == 1146)
+			echo "<div align=center>" . "出现此错误的原因有可能是因为开启了单用户单表，请联系管理员为您添加表" . "</div>";
 			exit;
 		} 
 	}
@@ -144,31 +146,34 @@ class DB{
 		$selectUser = $addUser = $user;
 		$oldGroup = $this->getUserGroup($user);
 		
-		$sql = $this->query("select * from " . $this->func->getPre("group") . " where name='" . $oldGroup . "'");
-		$getResult = $sql->fetch_assoc();
-		$oldGroupMembers = $getResult['member'];
-		
-		$sql = $this->query("select * from " . $this->func->getPre("group") . " where name='" . $newGroup . "'");
-		$getResult = $sql->fetch_assoc();
-		$newGroupMembers = $getResult['member'];
-		
-		//添加user
-		if ($newGroupMembers != "") $addUser = "," . $user;
-		$newMembers = $newGroupMembers . $addUser;
-		
-		//替换user
-		if (strpos($oldGroupMembers,$user) !== 0) $selectUser = "," . $user; else $selectUser = $user . ",";
-		$oldMembers = str_replace($selectUser,"",$oldGroupMembers);
-		
-		//更新数据库
-		$sql = $this->query("update "  . $this->func->getPre("group") . " set member='" . $oldMembers . "' where name='" . $oldGroup . "'");
-		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("无法更新原来组数据！数据是否一致？");
-		
-		$sql = $this->query("update "  . $this->func->getPre("group") . " set member='" . $newMembers . "' where name='" . $newGroup . "'");
-		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("无法更新新组数据！数据是否一致？");
-		
-		$sql = $this->query("update "  . $this->func->getPre("users") . " set groupname='" . $newGroup . "' where username='" . $user . "'");
-		if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("无法更新用户表数据！");
+		if($oldGroup != $newGroup)
+		{
+			$sql = $this->query("select * from " . $this->func->getPre("group") . " where name='" . $oldGroup . "'");
+			$getResult = $sql->fetch_assoc();
+			$oldGroupMembers = $getResult['member'];
+			
+			$sql = $this->query("select * from " . $this->func->getPre("group") . " where name='" . $newGroup . "'");
+			$getResult = $sql->fetch_assoc();
+			$newGroupMembers = $getResult['member'];
+			
+			//添加user
+			if ($newGroupMembers != "") $addUser = "," . $user;
+			$newMembers = $newGroupMembers . $addUser;
+			
+			//替换user
+			if (strpos($oldGroupMembers,$user) !== 0) $selectUser = "," . $user; else if ($oldGroupMembers != $user)$selectUser = $user . ","; else $selectUser = $user;
+			$oldMembers = str_replace($selectUser,"",$oldGroupMembers);
+			
+			//更新数据库
+			$sql = $this->query("update "  . $this->func->getPre("group") . " set member='" . $oldMembers . "' where name='" . $oldGroup . "'");
+			if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("无法更新原来组数据！数据是否一致？");
+			
+			$sql = $this->query("update "  . $this->func->getPre("group") . " set member='" . $newMembers . "' where name='" . $newGroup . "'");
+			if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("无法更新新组数据！数据是否一致？");
+			
+			$sql = $this->query("update "  . $this->func->getPre("users") . " set groupname='" . $newGroup . "' where username='" . $user . "'");
+			if ((!$sql) || ($this->conn->affected_rows < 1)) $theme->divAgc("无法更新用户表数据！");
+		} else $theme->divAgc("群组一致，无需更新！");
 	}
 	
 	public function createGroup($group,$members = null,$permission = null,$theme){
@@ -260,6 +265,7 @@ class DB{
 	public function createMsgTable($username){
 		//创建信息表
 		$format = $this->getFormat();
+		$list = '';
 		
 		foreach ($format as $sign){
 			$list .= ",`" . $sign . "` varchar(500) DEFAULT NULL";

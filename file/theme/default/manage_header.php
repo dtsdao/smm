@@ -17,7 +17,8 @@
 <?php 
 	$permission = array();
 	if (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"msg") !== false) $permission['信息'] = true;
-	if (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"users") !== false) $permission['用户'] = $permission['群组'] = true;
+	$permission['用户'] = true;
+	if (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"users") !== false) $permission['群组'] = true;
 	if (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"config") !== false) $permission['设置'] = true;
 	$perm_nums = count($permission); 
 ?>

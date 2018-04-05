@@ -18,18 +18,8 @@ if (strpos($db->getUserPerm($_SESSION[$this->func->getPre('username')]),"msg") =
 	include "footer.php";
 	exit;
 }
-?>
-
-<?php 
 $result = $this->db->getMsgRow();
 $maxid = 0;
-
-if ($result->num_rows > 0) $maxline = $result->num_rows + 1; else $maxline = 1;
-//格式化信息
-for ($i=1;$i<$maxline;$i++){
-	$row = $result->fetch_assoc();
-	$rows[$i] = $row;
-}
 ?>
 
 <table border=1 align="center" width="80%">
@@ -45,17 +35,17 @@ for ($i=1;$i<$maxline;$i++){
 	</tr>
 	
 	<!-- 数据库中信息 -->
-	<?php for ($i=1;$i<$maxline;$i++){ ?>
-		<?php if ($rows[$i]['id'] > $maxid) $maxid = $rows[$i]['id']; ?>
+	<?php while($row = $result->fetch_array()){ ?>
+		<?php if ($row['id'] > $maxid) $maxid = $row['id']; ?>
 		<tr><form method="POST" action="action.php">
 			<input type="hidden" name="kind" value="msg">
-			<input type="hidden" name="id" value="<?php echo $rows[$i]['id']; ?>">
-			<td><?php echo $rows[$i]['id']; ?></td>
+			<input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+			<td><?php echo $row['id']; ?></td>
 		<?php foreach ($this->db->getFormat() as $sign){ ?>
-				<td><input name="<?php echo $sign; ?>" value="<?php echo $rows[$i][$sign]; ?>" width="100%"></td>
+				<td><input name="<?php echo $sign; ?>" value="<?php echo $row[$sign]; ?>" width="100%"></td>
 		<?php } ?>
-			<td><?php echo $rows[$i]['author']; ?></td>
-			<td><?php echo $rows[$i]['time']; ?></td>
+			<td><?php echo $row['author']; ?></td>
+			<td><?php echo $row['time']; ?></td>
 			<td>
 				<input name="action"   type="submit" value="修改">
 				<input name="action"   type="submit" value="删除">
